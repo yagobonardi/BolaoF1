@@ -21,8 +21,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapGet("/drivers", () => BolaoF1DB.GetDrivers());
-app.MapGet("/grandprixes", () => BolaoF1DB.GetGrandPrixes());
-app.MapGet("/setResults{idGrandPrix}", (int idGrandPrix) => ResultService.SetResult(idGrandPrix));
+app.RegisterDriverEndpoints();
+
+app.RegisterGrandPrixEndpoints();
 
 app.Run();

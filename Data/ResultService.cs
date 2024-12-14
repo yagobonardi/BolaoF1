@@ -10,7 +10,7 @@ public class ResultService
     public const int THIRD_POINTS = 2;
     public const int FASTEST_LAP_POINTS = 1;
 
-    public static bool SetResult(int grandPrixId)
+    public static bool DistributePoints(int grandPrixId)
     {
         var actualResult = BolaoF1DB.GetGrandPrixResults().FirstOrDefault(w=>w.GrandPrixId == grandPrixId);
         
@@ -34,12 +34,8 @@ public class ResultService
         return true;
     }
 
-    public static void SetPoints(List<int> userIds, int points) 
+    public static void SetPoints(List<int> usersId, int points) 
     {
-        //O Melhor seria ter um update em todos os ids de uma vez, mas para o momento de poc esta ok
-        foreach(var userId in userIds) 
-        {
-            BolaoF1DB.UpdateUserPoints(userId, points);
-        }
+        BolaoF1DB.UpdateUserPoints(usersId, points);
     }
 }

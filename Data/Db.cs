@@ -84,6 +84,7 @@ public record Guess : Result
         new Driver{Id = 19, Name = "Yuki Tsunoda", Team = "RB" },
         new Driver{Id = 20, Name = "Liam Lawson", Team = "RB" }
     };
+
     private static List<GrandPrix> _circuits = new List<GrandPrix>()
     {
         new GrandPrix {Id = 1, Name = "Australian Grand Prix", Date = new DateTime(2025, 3, 16)},
@@ -110,49 +111,12 @@ public record Guess : Result
         new GrandPrix {Id = 22, Name = "Qatar Grand Prix", Date = new DateTime(2025, 11, 30)},
         new GrandPrix {Id = 23, Name = "Abu Dhabi Grand Prix", Date = new DateTime(2025, 12, 7)}
     };
+
     private static List<GrandPrixResult> _grandPrixResults = new List<GrandPrixResult>()
     {
-        new GrandPrixResult
-        {
-            Id = 1,
-            GrandPrixId = 1,
-            PoleDriverId = 1,
-            FirstDriverId = 1,
-            SecondDriverId = 2,
-            ThirdDriverId = 3,
-            FastestLapDriverId = 1
-        },
-        new GrandPrixResult
-        {
-            Id = 2,
-            GrandPrixId = 2,
-            PoleDriverId = 1,
-            FirstDriverId = 1,
-            SecondDriverId = 3,
-            ThirdDriverId = 2,
-            FastestLapDriverId = 3
-        },
-        new GrandPrixResult
-        {
-            Id = 3,
-            GrandPrixId = 3,
-            PoleDriverId = 3, 
-            FirstDriverId = 3,
-            SecondDriverId = 1,
-            ThirdDriverId = 4,
-            FastestLapDriverId = 4
-        },
-        new GrandPrixResult
-        {
-            Id = 4,
-            GrandPrixId = 4,
-            PoleDriverId = 5,
-            FirstDriverId = 5,
-            SecondDriverId = 3,
-            ThirdDriverId = 6,
-            FastestLapDriverId = 6
-        }
+
     };
+
     private static List<Guess> _guesses = new List<Guess>()
     {
         new Guess
@@ -248,40 +212,38 @@ public record Guess : Result
             Points = 105
         }
     };
+
    public static List<Driver> GetDrivers() 
-   {
-     return _drivers;
-   } 
+    {
+        return _drivers;
+    } 
+
     public static List<GrandPrix>GetGrandPrixes()
     {
         return _circuits;
     }
-    public static List<GrandPrixResult>GetGrandPrixResults()
+
+    public static List<GrandPrixResult> GetGrandPrixResults()
     {
         return _grandPrixResults;
     }
-    public static List<Guess>GetGuesses()
+
+    public static List<Guess> GetGuesses()
     {
         return _guesses;
     }
-    public static List<User>GetUsers()
+
+    public static bool SetGrandPrixResult(GrandPrixResult grandPrix)
     {
-        return _users;
+        _grandPrixResults.Add(grandPrix);
+        
+        return true;
     }
 
-    public static User ? GetUser(int id)
+    public static bool UpdateUserPoints(List<int> usersId, int points) 
     {
-        return _users.SingleOrDefault(f => f.Id == id);
-    }
-
-
-    public static User ? UpdateUserPoints(int userId, int points) 
-    {
-        var user = GetUser(userId);
-
-        if (user is not null)
-            user.Points = points;
-
-        return user;
+        //UPDATE tbl_user SET points = points + 4 WHERE Id in (1,2,3,4,5)
+        
+        return true;
     } 
 }
