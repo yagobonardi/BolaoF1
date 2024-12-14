@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<BolaoDb>(options => options.UseInMemoryDatabase("items"));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bolao F1 API", Version = "v1"});
@@ -22,7 +24,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.RegisterDriverEndpoints();
-
+app.RegisterUserEndpoints();
 app.RegisterGrandPrixEndpoints();
+app.RegisterGuessEndpoints();
+app.RegisterResultEndpoints();
 
 app.Run();
