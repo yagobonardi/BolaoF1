@@ -24,6 +24,7 @@ public static class UserEndpoint
             if (user is null) return Results.NotFound();
             user.Name = updateuser.Name;
             user.Mail = updateuser.Mail;
+            user.CityState = updateuser.CityState;
             user.Points = updateuser.Points;
             await db.SaveChangesAsync();
             return Results.NoContent();

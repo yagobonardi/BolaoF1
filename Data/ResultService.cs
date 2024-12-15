@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.Data.Common;
 using BolaoF1.DB;
 
 public class ResultService
@@ -10,32 +9,110 @@ public class ResultService
     public const int THIRD_POINTS = 2;
     public const int FASTEST_LAP_POINTS = 1;
 
-    public static bool DistributePoints(int grandPrixId)
+    private BolaoDb _bolaoDb {get; set;}
+
+    public ResultService(BolaoDb bolaoDb)
     {
-        var actualResult = BolaoF1DB.GetGrandPrixResults().FirstOrDefault(w=>w.GrandPrixId == grandPrixId);
+        _bolaoDb = bolaoDb;
+    }
+    
+    public bool Process()
+    {
+        var winners = GetWinnersIds(1);
         
-        var guesses = BolaoF1DB.GetGuesses();
+        if (winners is null) return false;
 
-        if (actualResult is null || guesses is null)
-            return false;
-
-        var guessPoleList = guesses.Where(s => s.PoleDriverId == actualResult.PoleDriverId);
-        var guessFirstList = guesses.Where(s => s.FirstDriverId == actualResult.FirstDriverId);
-        var guessSecondList = guesses.Where(s => s.SecondDriverId == actualResult.SecondDriverId);
-        var guessThirdList = guesses.Where(s => s.ThirdDriverId == actualResult.ThirdDriverId);
-        var guessFatestList = guesses.Where(s => s.FastestLapDriverId == actualResult.FastestLapDriverId);
-
-        SetPoints(guessPoleList.Select(s=>s.UserId).ToList(), POLE_POINTS);
-        SetPoints(guessFirstList.Select(s=>s.UserId).ToList(), FIRST_POINTS);
-        SetPoints(guessSecondList.Select(s=>s.UserId).ToList(), SECOND_POINTS);
-        SetPoints(guessThirdList.Select(s=>s.UserId).ToList(), THIRD_POINTS);
-        SetPoints(guessFatestList.Select(s=>s.UserId).ToList(), FASTEST_LAP_POINTS);
+        SetPointsToUsers(winners.PoleWinnersIds, POLE_POINTS);
+        SetPointsToUsers(winners.FirstWinnersIds, FIRST_POINTS);
+        SetPointsToUsers(winners.SecondWinnersIds, SECOND_POINTS);
+        SetPointsToUsers(winners.ThirdWinnersIds, THIRD_POINTS);
+        SetPointsToUsers(winners.FatestWinnersIds, FASTEST_LAP_POINTS);
 
         return true;
     }
 
-    public static void SetPoints(List<int> usersId, int points) 
+    public Winners ? GetWinnersIds(int grandPrixId)
     {
-        BolaoF1DB.UpdateUserPoints(usersId, points);
+        var result = GetGrandPrixResult(grandPrixId);
+
+        if (result is null) return null;
+
+        return new Winners()
+        {
+            PoleWinnersIds = GetGuessesCorrectPole(result.PoleDriverId),
+            FirstWinnersIds = GetGuessesCorrectFirst(result.PoleDriverId),
+            SecondWinnersIds = GetGuessesCorrectSecond(result.PoleDriverId),
+            ThirdWinnersIds = GetGuessesCorrectThird(result.PoleDriverId),
+            FatestWinnersIds = GetGuessesCorrectFatestLap(result.PoleDriverId)
+        };
     }
+
+    public async void SetPointsToUsers(List<int> userIds, int points)
+    {
+        if (userIds is not null)
+        {
+            foreach(int id in userIds)
+            {
+                var user = await _bolaoDb.Users.FindAsync(id);
+                if (user is null) continue;
+                var actualPoints = user.Points += points;
+                user.Points = actualPoints;
+                await _bolaoDb.SaveChangesAsync();
+            }
+        }
+    }
+    
+    public Result ? GetGrandPrixResult(int grandPrixId)
+    {
+        return _bolaoDb.Results.FirstOrDefault(f => f.GrandPrixId == grandPrixId);
+    }
+
+    public List<int> GetGuessesCorrectPole(int poleDriverIdResult)
+    {   
+        return _bolaoDb.Guesses
+            .Where(w => w.PoleDriverId == poleDriverIdResult)
+            .Select(s => s.UserId)
+            .ToList();
+    }
+
+    public List<int> GetGuessesCorrectFirst(int firstDriverIdResult)
+    {
+        return _bolaoDb.Guesses
+            .Where(w => w.FirstDriverId == firstDriverIdResult)
+            .Select(s => s.UserId)
+            .ToList();
+    }
+
+    public List<int> GetGuessesCorrectSecond(int secondDriverIdResult)
+    {
+        return _bolaoDb.Guesses
+            .Where(w => w.SecondDriverId == secondDriverIdResult)
+            .Select(s => s.UserId)
+            .ToList();
+    }
+
+    public List<int> GetGuessesCorrectThird(int thirdDriverIdResult)
+    {
+        return _bolaoDb.Guesses
+            .Where(w => w.ThirdDriverId == thirdDriverIdResult)
+            .Select(s => s.UserId)
+            .ToList();
+    }
+
+    public List<int> GetGuessesCorrectFatestLap(int fatestLapDriverIdResult)
+    {
+        return _bolaoDb.Guesses
+            .Where(w => w.FastestLapDriverId == fatestLapDriverIdResult)
+            .Select(s => s.UserId)
+            .ToList();
+    }
+}
+
+public record Winners
+{
+    public required List<int> PoleWinnersIds {get;set;}
+    public required List<int> FirstWinnersIds {get;set;}
+    public required List<int> SecondWinnersIds {get;set;}
+    public required List<int> ThirdWinnersIds {get;set;}
+    public required List<int> FatestWinnersIds {get;set;}
 }
