@@ -16,9 +16,9 @@ public class ResultService
         _bolaoDb = bolaoDb;
     }
     
-    public bool Process()
+    public bool Process(int grandPrixId)
     {
-        var winners = GetWinnersIds(1);
+        var winners = GetWinnersIds(grandPrixId);
         
         if (winners is null) return false;
 
@@ -61,7 +61,7 @@ public class ResultService
             }
         }
     }
-    
+
     public Result ? GetGrandPrixResult(int grandPrixId)
     {
         return _bolaoDb.Results.FirstOrDefault(f => f.GrandPrixId == grandPrixId);
