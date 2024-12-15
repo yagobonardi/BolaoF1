@@ -1,4 +1,3 @@
-using BolaoF1.DB;
 using Microsoft.EntityFrameworkCore;
 
 public static class GrandPrixEndpoint

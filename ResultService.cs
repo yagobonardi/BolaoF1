@@ -1,5 +1,5 @@
 using System.Data.Common;
-using BolaoF1.DB;
+using Microsoft.EntityFrameworkCore;
 
 public class ResultService
 {

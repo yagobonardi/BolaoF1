@@ -1,0 +1,26 @@
+[
+    { "Id": 1, "Name": "Australian Grand Prix", "Date": "2025-03-16" },
+    { "Id": 2, "Name": "Chinese Grand Prix", "Date": "2025-03-23" },
+    { "Id": 3, "Name": "Japanese Grand Prix", "Date": "2025-04-06" },
+    { "Id": 4, "Name": "Bahrain Grand Prix", "Date": "2025-04-13" },
+    { "Id": 5, "Name": "Saudi Arabian Grand Prix", "Date": "2025-04-20" },
+    { "Id": 6, "Name": "Emilia Romagna Grand Prix", "Date": "2025-05-18" },
+    { "Id": 7, "Name": "Monaco Grand Prix", "Date": "2025-05-25" },
+    { "Id": 8, "Name": "Spanish Grand Prix", "Date": "2025-06-01" },
+    { "Id": 9, "Name": "Canadian Grand Prix", "Date": "2025-06-15" },
+    { "Id": 10, "Name": "Austrian Grand Prix", "Date": "2025-06-29" },
+    { "Id": 11, "Name": "British Grand Prix", "Date": "2025-07-06" },
+    { "Id": 12, "Name": "Belgian Grand Prix", "Date": "2025-07-27" },
+    { "Id": 13, "Name": "Hungarian Grand Prix", "Date": "2025-08-03" },
+    { "Id": 14, "Name": "Dutch Grand Prix", "Date": "2025-08-31" },
+    { "Id": 15, "Name": "Italian Grand Prix", "Date": "2025-09-07" },
+    { "Id": 16, "Name": "Azerbaijan Grand Prix", "Date": "2025-09-21" },
+    { "Id": 17, "Name": "Singapore Grand Prix", "Date": "2025-10-05" },
+    { "Id": 18, "Name": "United States Grand Prix", "Date": "2025-10-19" },
+    { "Id": 19, "Name": "Mexican Grand Prix", "Date": "2025-10-26" },
+    { "Id": 20, "Name": "Brazilian Grand Prix", "Date": "2025-11-09" },
+    { "Id": 21, "Name": "Las Vegas Grand Prix", "Date": "2025-11-22" },
+    { "Id": 22, "Name": "Qatar Grand Prix", "Date": "2025-11-30" },
+    { "Id": 23, "Name": "Abu Dhabi Grand Prix", "Date": "2025-12-07" }
+  ]
+  
