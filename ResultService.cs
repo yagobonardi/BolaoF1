@@ -39,11 +39,11 @@ public class ResultService
 
         return new Winners()
         {
-            PoleWinnersIds = GetGuessesCorrectPole(result.PoleDriverId),
-            FirstWinnersIds = GetGuessesCorrectFirst(result.PoleDriverId),
-            SecondWinnersIds = GetGuessesCorrectSecond(result.PoleDriverId),
-            ThirdWinnersIds = GetGuessesCorrectThird(result.PoleDriverId),
-            FatestWinnersIds = GetGuessesCorrectFatestLap(result.PoleDriverId)
+            PoleWinnersIds = GetUsersIdCorrectPole(result.PoleDriverId),
+            FirstWinnersIds = GetUsersIdCorrectFirst(result.PoleDriverId),
+            SecondWinnersIds = GetUsersIdCorrectSecond(result.PoleDriverId),
+            ThirdWinnersIds = GetUsersIdCorrectThird(result.PoleDriverId),
+            FatestWinnersIds = GetUsersIdCorrectFatestLap(result.PoleDriverId)
         };
     }
 
@@ -67,7 +67,7 @@ public class ResultService
         return _bolaoDb.Results.FirstOrDefault(f => f.GrandPrixId == grandPrixId);
     }
 
-    public List<int> GetGuessesCorrectPole(int poleDriverIdResult)
+    public List<int> GetUsersIdCorrectPole(int poleDriverIdResult)
     {   
         return _bolaoDb.Guesses
             .Where(w => w.PoleDriverId == poleDriverIdResult)
@@ -75,7 +75,7 @@ public class ResultService
             .ToList();
     }
 
-    public List<int> GetGuessesCorrectFirst(int firstDriverIdResult)
+    public List<int> GetUsersIdCorrectFirst(int firstDriverIdResult)
     {
         return _bolaoDb.Guesses
             .Where(w => w.FirstDriverId == firstDriverIdResult)
@@ -83,7 +83,7 @@ public class ResultService
             .ToList();
     }
 
-    public List<int> GetGuessesCorrectSecond(int secondDriverIdResult)
+    public List<int> GetUsersIdCorrectSecond(int secondDriverIdResult)
     {
         return _bolaoDb.Guesses
             .Where(w => w.SecondDriverId == secondDriverIdResult)
@@ -91,7 +91,7 @@ public class ResultService
             .ToList();
     }
 
-    public List<int> GetGuessesCorrectThird(int thirdDriverIdResult)
+    public List<int> GetUsersIdCorrectThird(int thirdDriverIdResult)
     {
         return _bolaoDb.Guesses
             .Where(w => w.ThirdDriverId == thirdDriverIdResult)
@@ -99,7 +99,7 @@ public class ResultService
             .ToList();
     }
 
-    public List<int> GetGuessesCorrectFatestLap(int fatestLapDriverIdResult)
+    public List<int> GetUsersIdCorrectFatestLap(int fatestLapDriverIdResult)
     {
         return _bolaoDb.Guesses
             .Where(w => w.FastestLapDriverId == fatestLapDriverIdResult)
