@@ -15,6 +15,13 @@ public static class DriversEndpoint
             return Results.Created($"/drivers/{driver.Id}", driver);
         });
 
+        drivers.MapPost("/list", async (BolaoDb db, Driver[] drivers) => 
+        {
+            await db.Drivers.AddRangeAsync(drivers);
+            await db.SaveChangesAsync();
+            return Results.Created();
+        });
+
         drivers.MapGet("/{id}", async (BolaoDb db, int id) => await db.Drivers.FindAsync(id));
 
         drivers.MapPut("/{id}", async (BolaoDb db, Driver updatedriver, int id) =>

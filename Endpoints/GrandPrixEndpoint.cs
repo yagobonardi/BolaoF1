@@ -15,6 +15,13 @@ public static class GrandPrixEndpoint
             return Results.Created($"/grandprix/{grandPrix.Id}", grandPrix);
         });
 
+        grandPrix.MapPost("/list", async (BolaoDb db, GrandPrix[] grandPrix) => 
+        {
+            await db.GrandPrixes.AddRangeAsync(grandPrix);
+            await db.SaveChangesAsync();
+            return Results.Created();
+        });
+
         grandPrix.MapGet("/{id}", async (BolaoDb db, int id) => await db.GrandPrixes.FindAsync(id));
 
         grandPrix.MapPut("/{id}", async (BolaoDb db, GrandPrix updateGrandPrix, int id) =>
