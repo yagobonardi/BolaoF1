@@ -4,20 +4,20 @@ public static class ResultEndpoint
 {
     public static void RegisterResultEndpoints(this IEndpointRouteBuilder routes)
     {
-        var users = routes.MapGroup("/api/v1/results");
+        var results = routes.MapGroup("/api/v1/results");
 
-        users.MapGet("/", async (BolaoDb db) => await db.Results.ToListAsync());
+        results.MapGet("/", async (BolaoDb db) => await db.Results.ToListAsync());
 
-        users.MapPost("/", async (BolaoDb db, Result result) => 
+        results.MapPost("/", async (BolaoDb db, Result result) => 
         {
             await db.Results.AddAsync(result);
             await db.SaveChangesAsync();
             return Results.Created($"/results/{result.Id}", result);
         });
 
-        users.MapGet("/{id}", async (BolaoDb db, int id) => await db.Results.FindAsync(id));
+        results.MapGet("/{id}", async (BolaoDb db, int id) => await db.Results.FindAsync(id));
 
-        users.MapPut("/{id}", async (BolaoDb db, Result updatresult, int id) =>
+        results.MapPut("/{id}", async (BolaoDb db, Result updatresult, int id) =>
         {
             var results = await db.Results.FindAsync(id);
             if (results is null) return Results.NotFound();
@@ -31,13 +31,19 @@ public static class ResultEndpoint
             return Results.NoContent();
         });
 
-        users.MapDelete("/{id}", async (BolaoDb db, int id) =>
+        results.MapDelete("/{id}", async (BolaoDb db, int id) =>
         {
             var result = await db.Results.FindAsync(id);
             if (result is null) return Results.NotFound();
             db.Results.Remove(result);
             await db.SaveChangesAsync();
             return Results.Ok();
+        });
+
+        results.MapPost("/processResult/{idgrandprix}", (ResultService resultservice, int idgrandprix) =>
+        {
+            var resultProcess = resultservice.Process(idgrandprix);
+            return resultProcess ? Results.Ok() : Results.BadRequest();
         });
     }
 }

@@ -11,6 +11,7 @@ public class ResultService
 
     private BolaoDb _bolaoDb {get; set;}
 
+    //TODO: corrigir acesso aos dados
     public ResultService(BolaoDb bolaoDb)
     {
         _bolaoDb = bolaoDb;
@@ -18,9 +19,16 @@ public class ResultService
     
     public bool Process(int grandPrixId)
     {
+        Console.WriteLine("Iniciando processo");
+        
         var winners = GetWinnersIds(grandPrixId);
         
-        if (winners is null) return false;
+        if (winners is null)
+        {
+            Console.WriteLine("Processo interrompido");
+            
+            return false;
+        }
 
         SetPointsToUsers(winners.PoleWinnersIds, POLE_POINTS);
         SetPointsToUsers(winners.FirstWinnersIds, FIRST_POINTS);
@@ -28,14 +36,21 @@ public class ResultService
         SetPointsToUsers(winners.ThirdWinnersIds, THIRD_POINTS);
         SetPointsToUsers(winners.FatestWinnersIds, FASTEST_LAP_POINTS);
 
+        Console.WriteLine("Processo concluido");
+
         return true;
     }
 
     public Winners ? GetWinnersIds(int grandPrixId)
-    {
+    {   
         var result = GetGrandPrixResult(grandPrixId);
 
-        if (result is null) return null;
+        if (result is null)
+        {
+            Console.WriteLine("GrandPrix não encontrado");
+
+            return null;
+        }
 
         return new Winners()
         {
