@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BolaoDb>(options =>  options.UseNpgsql("Host=localhost:5432;Database=bolao;Username=admin;Password=admin"));
 
-builder.Services.AddSingleton<ResultService>();
+// builder.Services.AddSingleton<ResultService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {

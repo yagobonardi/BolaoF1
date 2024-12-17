@@ -40,10 +40,10 @@ public static class ResultEndpoint
             return Results.Ok();
         });
 
-        results.MapPost("/processResult/{idgrandprix}", (ResultService resultservice, int idgrandprix) =>
-        {
-            var resultProcess = resultservice.Process(idgrandprix);
-            return resultProcess ? Results.Ok() : Results.BadRequest();
-        });
+        // results.MapPost("/processResult/{idgrandprix}", (ResultService resultservice, int idgrandprix) =>
+        // {
+        //     var resultProcess = resultservice.Process(idgrandprix);
+        //     return resultProcess ? Results.Ok() : Results.BadRequest();
+        // });
     }
 }
