@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 public static class ResultEndpoint
@@ -6,44 +7,23 @@ public static class ResultEndpoint
     {
         var results = routes.MapGroup("/api/v1/results");
 
-        results.MapGet("/", async (BolaoDb db) => await db.Results.ToListAsync());
+        results.MapGet("/", async (IResultRepository repository) => 
+            await repository.GetAllResults());
 
-        results.MapPost("/", async (BolaoDb db, Result result) => 
+        results.MapPost("/", async (IResultRepository repository, Result result) => 
+            await repository.CreateResult(result));
+
+        results.MapGet("/{id}", async (IResultRepository repository, int id) => 
+            await repository.GetResultById(id));
+
+        results.MapPut("/{id}", async (IResultRepository repository, Result updatedresult) =>
         {
-            await db.Results.AddAsync(result);
-            await db.SaveChangesAsync();
-            return Results.Created($"/results/{result.Id}", result);
+            await repository.UpdateResult(updatedresult);
         });
 
-        results.MapGet("/{id}", async (BolaoDb db, int id) => await db.Results.FindAsync(id));
-
-        results.MapPut("/{id}", async (BolaoDb db, Result updatresult, int id) =>
+        results.MapDelete("/{id}", async (IResultRepository repository, int id) =>
         {
-            var results = await db.Results.FindAsync(id);
-            if (results is null) return Results.NotFound();
-            results.PoleDriverId = updatresult.PoleDriverId;
-            results.FastestLapDriverId = updatresult.FastestLapDriverId;
-            results.FirstDriverId = updatresult.FirstDriverId;
-            results.SecondDriverId = updatresult.SecondDriverId;
-            results.ThirdDriverId = updatresult.ThirdDriverId;
-            results.GrandPrixId = updatresult.GrandPrixId;
-            await db.SaveChangesAsync();
-            return Results.NoContent();
+            await repository.DeleteResult(id);
         });
-
-        results.MapDelete("/{id}", async (BolaoDb db, int id) =>
-        {
-            var result = await db.Results.FindAsync(id);
-            if (result is null) return Results.NotFound();
-            db.Results.Remove(result);
-            await db.SaveChangesAsync();
-            return Results.Ok();
-        });
-
-        // results.MapPost("/processResult/{idgrandprix}", (ResultService resultservice, int idgrandprix) =>
-        // {
-        //     var resultProcess = resultservice.Process(idgrandprix);
-        //     return resultProcess ? Results.Ok() : Results.BadRequest();
-        // });
     }
 }

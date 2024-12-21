@@ -6,36 +6,19 @@ public static class UserEndpoint
     {
         var users = routes.MapGroup("/api/v1/users");
 
-        users.MapGet("/", async (BolaoDb db) => await db.Users.ToListAsync());
+        users.MapGet("/", async (IUserRepository repository) => 
+            await repository.GetAllUsers());
 
-        users.MapPost("/", async (BolaoDb db, User user) => 
-        {
-            await db.Users.AddAsync(user);
-            await db.SaveChangesAsync();
-            return Results.Created($"/users/{user.Id}", user);
-        });
+        users.MapPost("/", async (IUserRepository repository, User user) => 
+            await repository.CreateUser(user));
 
-        users.MapGet("/{id}", async (BolaoDb db, int id) => await db.Users.FindAsync(id));
+        users.MapGet("/{id}", async (IUserRepository repository, int id) => 
+            await repository.GetUserById(id));
 
-        users.MapPut("/{id}", async (BolaoDb db, User updateuser, int id) =>
-        {
-            var user = await db.Users.FindAsync(id);
-            if (user is null) return Results.NotFound();
-            user.Name = updateuser.Name;
-            user.Mail = updateuser.Mail;
-            user.CityState = updateuser.CityState;
-            user.Points = updateuser.Points;
-            await db.SaveChangesAsync();
-            return Results.NoContent();
-        });
+        users.MapPut("/{id}", async (IUserRepository repository, User updateduser) =>
+            await repository.UpdateUser(updateduser));
 
-        users.MapDelete("/{id}", async (BolaoDb db, int id) =>
-        {
-            var user = await db.Users.FindAsync(id);
-            if (user is null) return Results.NotFound();
-            db.Users.Remove(user);
-            await db.SaveChangesAsync();
-            return Results.Ok();
-        });
+        users.MapDelete("/{id}", async (IUserRepository repository, int id) =>
+            await repository.DeleteUser(id));
     }
 }

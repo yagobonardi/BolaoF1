@@ -6,41 +6,22 @@ public static class GrandPrixEndpoint
     {
         var grandPrix = routes.MapGroup("api/v1/grandprix");
         
-        grandPrix.MapGet("/", async (BolaoDb db) => await db.GrandPrixes.ToListAsync());
+        grandPrix.MapGet("/", async (IGrandPrixRepository repository) => 
+            await repository.GetAllGrandPrix());
 
-        grandPrix.MapPost("/", async (BolaoDb db, GrandPrix grandPrix) => 
-        {
-            await db.GrandPrixes.AddAsync(grandPrix);
-            await db.SaveChangesAsync();
-            return Results.Created($"/grandprix/{grandPrix.Id}", grandPrix);
-        });
+        grandPrix.MapPost("/", async (IGrandPrixRepository repository, GrandPrix grandPrix) => 
+            await repository.CreateGrandPrix(grandPrix));
 
-        grandPrix.MapPost("/list", async (BolaoDb db, GrandPrix[] grandPrix) => 
-        {
-            await db.GrandPrixes.AddRangeAsync(grandPrix);
-            await db.SaveChangesAsync();
-            return Results.Created();
-        });
+        grandPrix.MapPost("/list", async (IGrandPrixRepository repository, List<GrandPrix> grandPrix) => 
+            await repository.CreatePrixes(grandPrix));
 
-        grandPrix.MapGet("/{id}", async (BolaoDb db, int id) => await db.GrandPrixes.FindAsync(id));
+        grandPrix.MapGet("/{id}", async (IGrandPrixRepository repository, int id) => 
+            await repository.GetGrandPrixById(id));
 
-        grandPrix.MapPut("/{id}", async (BolaoDb db, GrandPrix updateGrandPrix, int id) =>
-        {
-            var grandPrix = await db.GrandPrixes.FindAsync(id);
-            if (grandPrix is null) return Results.NotFound();
-            grandPrix.Name = updateGrandPrix.Name;
-            grandPrix.Date = updateGrandPrix.Date;
-            await db.SaveChangesAsync();
-            return Results.NoContent();
-        });
+        grandPrix.MapPut("/{id}", async (IGrandPrixRepository repository, GrandPrix updatedgrandprix) =>
+            await repository.UpdateGrandPrix(updatedgrandprix));
 
-        grandPrix.MapDelete("/{id}", async (BolaoDb db, int id) =>
-        {
-            var grandPrix = await db.GrandPrixes.FindAsync(id);
-            if (grandPrix is null) return Results.NotFound();
-            db.GrandPrixes.Remove(grandPrix);
-            await db.SaveChangesAsync();
-            return Results.Ok();
-        }); 
+        grandPrix.MapDelete("/{id}", async (IGrandPrixRepository repository, int id) =>
+            await repository.DeleteGrandPrixById(id)); 
     }
 }

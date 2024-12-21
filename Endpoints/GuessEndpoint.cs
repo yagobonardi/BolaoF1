@@ -6,41 +6,19 @@ public static class GuessEndpoint
     {
         var users = routes.MapGroup("/api/v1/guess");
 
-        users.MapGet("/", async (BolaoDb db) => await db.Guesses.ToListAsync());
+        users.MapGet("/", async (IGuessRepository repository) => 
+            await repository.GetAllGuesss());
 
-        users.MapPost("/", async (BolaoDb db, Guess guess) => 
-        {
-            await db.Guesses.AddAsync(guess);
-            await db.SaveChangesAsync();
-            return Results.Created($"/guess/{guess.Id}", guess);
-        });
+        users.MapPost("/", async (IGuessRepository repository, Guess guess) => 
+            await repository.CreateGuess(guess));
 
-        users.MapGet("/{id}", async (BolaoDb db, int id) => await db.Guesses.FindAsync(id));
+        users.MapGet("/{id}", async (IGuessRepository repository, int id) => 
+            await repository.GetGuessById(id));
 
-        users.MapPut("/{id}", async (BolaoDb db, Guess updateguess, int id) =>
-        {
-            var guess = await db.Guesses.FindAsync(id);
-            if (guess is null) return Results.NotFound();
-            guess.UserId = updateguess.UserId;
-            guess.PoleDriverId = updateguess.PoleDriverId;
-            guess.FastestLapDriverId = updateguess.FastestLapDriverId;
-            guess.FirstDriverId = updateguess.FirstDriverId;
-            guess.SecondDriverId = updateguess.SecondDriverId;
-            guess.ThirdDriverId = updateguess.ThirdDriverId;
-            guess.Points = updateguess.Points;
-            guess.GrandPrixId = updateguess.GrandPrixId;
-            guess.RegisterDate = DateTime.Now;
-            await db.SaveChangesAsync();
-            return Results.NoContent();
-        });
+        users.MapPut("/{id}", async (IGuessRepository repository, Guess updatedguess, int id) =>
+            await repository.UpdateGuess(updatedguess));
 
-        users.MapDelete("/{id}", async (BolaoDb db, int id) =>
-        {
-            var guess = await db.Guesses.FindAsync(id);
-            if (guess is null) return Results.NotFound();
-            db.Guesses.Remove(guess);
-            await db.SaveChangesAsync();
-            return Results.Ok();
-        });
+        users.MapDelete("/{id}", async (IGuessRepository repository, int id) =>
+            await repository.DeleteGuess(id));
     }
 }

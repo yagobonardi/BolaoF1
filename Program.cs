@@ -7,7 +7,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BolaoDb>(options =>  options.UseNpgsql("Host=localhost:5432;Database=bolao;Username=admin;Password=admin"));
 
-// builder.Services.AddSingleton<ResultService>();
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+builder.Services.AddScoped<IResultRepository, ResultRepository>();
+builder.Services.AddScoped<IGrandPrixRepository, GrandPrixRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IGuessRepository, GuessRepository>();
+builder.Services.AddScoped<IProcess, Process>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
