@@ -1,3 +1,3 @@
-public interface IProcess {
+public interface IScorerProcess {
     Task<bool> ProcessGrandPrixPoints(int idGrandPrix);
 }

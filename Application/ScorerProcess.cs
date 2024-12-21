@@ -1,7 +1,7 @@
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 
-public class Process : IProcess 
+public class ScorerProcess : IScorerProcess 
 {
     public const int POLE_POINTS = 4;
     public const int FIRST_POINTS = 5;
@@ -14,7 +14,7 @@ public class Process : IProcess
 
     private readonly UserRepository _userRepository;
 
-    public Process(ResultRepository resultRepository, 
+    public ScorerProcess(ResultRepository resultRepository, 
                    GuessRepository guessRepository,
                    UserRepository userRepository) {
         _resultRepository = resultRepository;
@@ -37,7 +37,7 @@ public class Process : IProcess
         return true;
     }
 
-    public async Task<Winners> ? GetWinnersIds(int idGrandPrix)
+    public async Task<Winners> GetWinnersIds(int idGrandPrix)
     {   
         var result = await _resultRepository.GetResultByGrandPrixId(idGrandPrix);
         var guesses = await _guessRepository.GetAllGuessByGrandPrixId(idGrandPrix);
