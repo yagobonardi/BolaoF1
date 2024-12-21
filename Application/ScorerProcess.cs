@@ -9,14 +9,14 @@ public class ScorerProcess : IScorerProcess
     public const int THIRD_POINTS = 2;
     public const int FASTEST_LAP_POINTS = 1;
 
-    private readonly ResultRepository _resultRepository;
-    private readonly GuessRepository _guessRepository;
+    private readonly IResultRepository _resultRepository;
+    private readonly IGuessRepository _guessRepository;
 
-    private readonly UserRepository _userRepository;
+    private readonly IUserRepository _userRepository;
 
-    public ScorerProcess(ResultRepository resultRepository, 
-                   GuessRepository guessRepository,
-                   UserRepository userRepository) {
+    public ScorerProcess(IResultRepository resultRepository, 
+                   IGuessRepository guessRepository,
+                   IUserRepository userRepository) {
         _resultRepository = resultRepository;
         _guessRepository = guessRepository;
         _userRepository = userRepository;
