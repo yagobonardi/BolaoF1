@@ -1,6 +1,6 @@
 [
   { "name": "Max Verstappen", "team": "RedBull", "active": true },
-  { "name": "Sergio Perez", "team": "RedBull", "active": true },
+  { "name": "Liam Lawson", "team": "RedBull", "active": true },
   { "name": "Charles Leclerc", "team": "Ferrari", "active": true },
   { "name": "Lewis Hamilton", "team": "Ferrari", "active": true },
   { "name": "George Russell", "team": "Mercedes", "active": true },
@@ -18,5 +18,5 @@
   { "name": "Alexander Albon", "team": "Williams", "active": true },
   { "name": "Carlos Sainz", "team": "Williams", "active": true },
   { "name": "Yuki Tsunoda", "team": "RB", "active": true },
-  { "name": "Liam Lawson", "team": "RB", "active": true }
+  { "name": "Isack hadjar", "team": "RB", "active": true }
 ]
