@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 
 public class ScorerProcess : IScorerProcess 
@@ -22,11 +23,19 @@ public class ScorerProcess : IScorerProcess
         _userRepository = userRepository;
     }
     
-    public async Task<bool> ProcessGrandPrixPoints(int idGrandPrix)
+    public async Task<Tuple<bool, string>> ProcessGrandPrixPoints(int idGrandPrix)
     {
-        var winners = await GetWinnersIds(idGrandPrix);
+        var result = await _resultRepository.GetResultByGrandPrixId(idGrandPrix);
+
+        if (result is null) return Tuple.Create(false, "sem resultados para processar");
         
-        if (winners is null) return false;
+        var guesses = await _guessRepository.GetGuessByGrandPrixId(idGrandPrix);
+
+        if (guesses is null) return Tuple.Create(false, "sem palpites para processar");
+
+        var winners = GetWinnersIds(result, guesses);
+        
+        if (winners is null) return Tuple.Create(false, "sem vencedores para pontuar");
 
         await _userRepository.UpdateUsersPoints(winners.PoleWinnersIds, POLE_POINTS);
         await _userRepository.UpdateUsersPoints(winners.FirstWinnersIds, FIRST_POINTS);
@@ -34,21 +43,24 @@ public class ScorerProcess : IScorerProcess
         await _userRepository.UpdateUsersPoints(winners.ThirdWinnersIds, THIRD_POINTS);
         await _userRepository.UpdateUsersPoints(winners.FatestWinnersIds, FASTEST_LAP_POINTS);
 
-        return true;
+        return Tuple.Create(true, "Pontuação processada");
     }
 
-    public async Task<Winners> GetWinnersIds(int idGrandPrix)
+    public Winners GetWinnersIds(Result result, List<Guess> guesses)
     {   
-        var result = await _resultRepository.GetResultByGrandPrixId(idGrandPrix);
-        var guesses = await _guessRepository.GetGuessByGrandPrixId(idGrandPrix);
+        var poleWinnersIds = GetUsersIdCorrectPole(result.PoleDriverId, guesses);
+        var firstWinnersIds = GetUsersIdCorrectFirst(result.FirstDriverId, guesses);
+        var secondWinnersIds = GetUsersIdCorrectSecond(result.SecondDriverId, guesses);
+        var thirdWinnersIds = GetUsersIdCorrectThird(result.ThirdDriverId, guesses);
+        var fatestWinnersIds = GetUsersIdCorrectFatestLap(result.FastestLapDriverId, guesses);
 
         return new Winners()
         {
-            PoleWinnersIds = GetUsersIdCorrectPole(result.PoleDriverId, guesses),
-            FirstWinnersIds = GetUsersIdCorrectFirst(result.FirstDriverId, guesses),
-            SecondWinnersIds = GetUsersIdCorrectSecond(result.SecondDriverId, guesses),
-            ThirdWinnersIds = GetUsersIdCorrectThird(result.ThirdDriverId, guesses),
-            FatestWinnersIds = GetUsersIdCorrectFatestLap(result.FastestLapDriverId, guesses)
+            PoleWinnersIds = poleWinnersIds,
+            FirstWinnersIds = firstWinnersIds,
+            SecondWinnersIds = secondWinnersIds,
+            ThirdWinnersIds = thirdWinnersIds,
+            FatestWinnersIds = fatestWinnersIds
         };
     }
 

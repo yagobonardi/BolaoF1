@@ -1,3 +1,3 @@
 public interface IScorerProcess {
-    Task<bool> ProcessGrandPrixPoints(int idGrandPrix);
+    Task<Tuple<bool, string>> ProcessGrandPrixPoints(int idGrandPrix);
 }
