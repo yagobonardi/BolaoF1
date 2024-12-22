@@ -35,5 +35,6 @@ app.RegisterUserEndpoints();
 app.RegisterGrandPrixEndpoints();
 app.RegisterGuessEndpoints();
 app.RegisterResultEndpoints();
+app.RegisterScorerEndpoints();
 
 app.Run();

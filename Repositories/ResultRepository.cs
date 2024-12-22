@@ -20,6 +20,7 @@ public class ResultRepository : IResultRepository
         var result = await _context.Results.FindAsync(id);
         if (result is not null) {
             _context.Results.Remove(result);
+            await _context.SaveChangesAsync();
             return true;
         }
 

@@ -20,13 +20,14 @@ public class GuessRepository : IGuessRepository {
         var guess = await _context.Guesses.FindAsync(id);
         if (guess is not null) {
             _context.Guesses.Remove(guess);
+            await _context.SaveChangesAsync();
             return true;
         }
 
         return false;
     }
 
-    public async Task<List<Guess>> GetAllGuessByGrandPrixId(int grandprixid)
+    public async Task<List<Guess>> GetGuessByGrandPrixId(int grandprixid)
     {
        return await _context.Guesses.Where(w=> w.GrandPrixId == grandprixid).ToListAsync(); 
     }

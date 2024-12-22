@@ -5,5 +5,5 @@ public interface IGuessRepository {
 
     Task<Guess?> UpdateGuess(Guess updatedguess);
     Task<bool> DeleteGuess(int id);
-    Task<List<Guess>> GetAllGuessByGrandPrixId(int grandprixid);
+    Task<List<Guess>> GetGuessByGrandPrixId(int grandprixid);
 }

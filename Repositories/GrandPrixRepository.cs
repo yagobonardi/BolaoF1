@@ -26,6 +26,7 @@ public class GrandPrixRepository : IGrandPrixRepository {
         var grandprix = await _context.GrandPrixes.FindAsync(id);
         if (grandprix is not null) {
             _context.GrandPrixes.Remove(grandprix);
+            await _context.SaveChangesAsync();
             return true;
         }
 

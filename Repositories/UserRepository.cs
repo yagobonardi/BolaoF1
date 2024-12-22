@@ -20,6 +20,7 @@ public class UserRepository : IUserRepository {
         var user = await _context.Users.FindAsync(id);
         if (user is not null) {
             _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
             return true;
         }
 

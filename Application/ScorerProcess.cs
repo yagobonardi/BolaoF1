@@ -40,15 +40,15 @@ public class ScorerProcess : IScorerProcess
     public async Task<Winners> GetWinnersIds(int idGrandPrix)
     {   
         var result = await _resultRepository.GetResultByGrandPrixId(idGrandPrix);
-        var guesses = await _guessRepository.GetAllGuessByGrandPrixId(idGrandPrix);
+        var guesses = await _guessRepository.GetGuessByGrandPrixId(idGrandPrix);
 
         return new Winners()
         {
             PoleWinnersIds = GetUsersIdCorrectPole(result.PoleDriverId, guesses),
-            FirstWinnersIds = GetUsersIdCorrectFirst(result.PoleDriverId, guesses),
-            SecondWinnersIds = GetUsersIdCorrectSecond(result.PoleDriverId, guesses),
-            ThirdWinnersIds = GetUsersIdCorrectThird(result.PoleDriverId, guesses),
-            FatestWinnersIds = GetUsersIdCorrectFatestLap(result.PoleDriverId, guesses)
+            FirstWinnersIds = GetUsersIdCorrectFirst(result.FirstDriverId, guesses),
+            SecondWinnersIds = GetUsersIdCorrectSecond(result.SecondDriverId, guesses),
+            ThirdWinnersIds = GetUsersIdCorrectThird(result.ThirdDriverId, guesses),
+            FatestWinnersIds = GetUsersIdCorrectFatestLap(result.FastestLapDriverId, guesses)
         };
     }
 

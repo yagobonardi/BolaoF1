@@ -29,6 +29,7 @@ public class DriverRepository : IDriverRepository
         var driver = await _context.Drivers.FindAsync(id);
         if (driver is not null) {
             _context.Drivers.Remove(driver);
+            await _context.SaveChangesAsync();
             return true;
         }
 
