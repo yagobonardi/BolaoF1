@@ -26,10 +26,12 @@ public class ScorerProcess : IScorerProcess
     public async Task<Tuple<bool, string>> ProcessGrandPrixPoints(int idGrandPrix)
     {
         var result = await _resultRepository.GetResultByGrandPrixId(idGrandPrix);
-        if (result is null) return Tuple.Create(false, "sem resultados para processar");
+        if (result is null) 
+            return Tuple.Create(false, "sem resultados para processar");
         
         var guesses = await _guessRepository.GetGuessByGrandPrixId(idGrandPrix);
-        if (guesses is null) return Tuple.Create(false, "sem palpites para processar");
+        if (guesses is null) 
+            return Tuple.Create(false, "sem palpites para processar");
 
         var poleWinnersIds = GetUsersIdCorrectPole(result.PoleDriverId, guesses);
         var firstWinnersIds = GetUsersIdCorrectFirst(result.FirstDriverId, guesses);
@@ -37,11 +39,16 @@ public class ScorerProcess : IScorerProcess
         var thirdWinnersIds = GetUsersIdCorrectThird(result.ThirdDriverId, guesses);
         var fatestWinnersIds = GetUsersIdCorrectFatestLap(result.FastestLapDriverId, guesses);
 
-        if (poleWinnersIds.Any()) await _userRepository.UpdateUsersPoints(poleWinnersIds, POLE_POINTS);
-        if (firstWinnersIds.Any()) await _userRepository.UpdateUsersPoints(firstWinnersIds, FIRST_POINTS);
-        if (secondWinnersIds.Any()) await _userRepository.UpdateUsersPoints(secondWinnersIds, SECOND_POINTS);
-        if (thirdWinnersIds.Any()) await _userRepository.UpdateUsersPoints(thirdWinnersIds, THIRD_POINTS);
-        if (fatestWinnersIds.Any()) await _userRepository.UpdateUsersPoints(fatestWinnersIds, FASTEST_LAP_POINTS);
+        if (poleWinnersIds.Any()) 
+            await _userRepository.UpdateUsersPoints(poleWinnersIds, POLE_POINTS);
+        if (firstWinnersIds.Any()) 
+            await _userRepository.UpdateUsersPoints(firstWinnersIds, FIRST_POINTS);
+        if (secondWinnersIds.Any()) 
+            await _userRepository.UpdateUsersPoints(secondWinnersIds, SECOND_POINTS);
+        if (thirdWinnersIds.Any()) 
+            await _userRepository.UpdateUsersPoints(thirdWinnersIds, THIRD_POINTS);
+        if (fatestWinnersIds.Any()) 
+            await _userRepository.UpdateUsersPoints(fatestWinnersIds, FASTEST_LAP_POINTS);
 
         return Tuple.Create(true, "Pontuação processada");
     } 
