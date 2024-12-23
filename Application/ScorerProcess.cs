@@ -26,43 +26,25 @@ public class ScorerProcess : IScorerProcess
     public async Task<Tuple<bool, string>> ProcessGrandPrixPoints(int idGrandPrix)
     {
         var result = await _resultRepository.GetResultByGrandPrixId(idGrandPrix);
-
         if (result is null) return Tuple.Create(false, "sem resultados para processar");
         
         var guesses = await _guessRepository.GetGuessByGrandPrixId(idGrandPrix);
-
         if (guesses is null) return Tuple.Create(false, "sem palpites para processar");
 
-        var winners = GetWinnersIds(result, guesses);
-        
-        if (winners is null) return Tuple.Create(false, "sem vencedores para pontuar");
-
-        await _userRepository.UpdateUsersPoints(winners.PoleWinnersIds, POLE_POINTS);
-        await _userRepository.UpdateUsersPoints(winners.FirstWinnersIds, FIRST_POINTS);
-        await _userRepository.UpdateUsersPoints(winners.SecondWinnersIds, SECOND_POINTS);
-        await _userRepository.UpdateUsersPoints(winners.ThirdWinnersIds, THIRD_POINTS);
-        await _userRepository.UpdateUsersPoints(winners.FatestWinnersIds, FASTEST_LAP_POINTS);
-
-        return Tuple.Create(true, "Pontuação processada");
-    }
-
-    public Winners GetWinnersIds(Result result, List<Guess> guesses)
-    {   
         var poleWinnersIds = GetUsersIdCorrectPole(result.PoleDriverId, guesses);
         var firstWinnersIds = GetUsersIdCorrectFirst(result.FirstDriverId, guesses);
         var secondWinnersIds = GetUsersIdCorrectSecond(result.SecondDriverId, guesses);
         var thirdWinnersIds = GetUsersIdCorrectThird(result.ThirdDriverId, guesses);
         var fatestWinnersIds = GetUsersIdCorrectFatestLap(result.FastestLapDriverId, guesses);
 
-        return new Winners()
-        {
-            PoleWinnersIds = poleWinnersIds,
-            FirstWinnersIds = firstWinnersIds,
-            SecondWinnersIds = secondWinnersIds,
-            ThirdWinnersIds = thirdWinnersIds,
-            FatestWinnersIds = fatestWinnersIds
-        };
-    }
+        if (poleWinnersIds.Any()) await _userRepository.UpdateUsersPoints(poleWinnersIds, POLE_POINTS);
+        if (firstWinnersIds.Any()) await _userRepository.UpdateUsersPoints(firstWinnersIds, FIRST_POINTS);
+        if (secondWinnersIds.Any()) await _userRepository.UpdateUsersPoints(secondWinnersIds, SECOND_POINTS);
+        if (thirdWinnersIds.Any()) await _userRepository.UpdateUsersPoints(thirdWinnersIds, THIRD_POINTS);
+        if (fatestWinnersIds.Any()) await _userRepository.UpdateUsersPoints(fatestWinnersIds, FASTEST_LAP_POINTS);
+
+        return Tuple.Create(true, "Pontuação processada");
+    } 
 
     public List<int> GetUsersIdCorrectPole(int poleDriverIdResult, List<Guess> guesses)
     {   
@@ -103,13 +85,4 @@ public class ScorerProcess : IScorerProcess
             .Select(s => s.UserId)
             .ToList();
     }
-}
-
-public record Winners
-{
-    public required List<int> PoleWinnersIds {get;set;}
-    public required List<int> FirstWinnersIds {get;set;}
-    public required List<int> SecondWinnersIds {get;set;}
-    public required List<int> ThirdWinnersIds {get;set;}
-    public required List<int> FatestWinnersIds {get;set;}
 }
