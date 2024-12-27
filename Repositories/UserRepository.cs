@@ -8,11 +8,18 @@ public class UserRepository : IUserRepository {
         _context = context;
     }
 
-    public async Task<User> CreateUser(User user)
+    public async Task<User> CreateUser(CreateUserDTO user)
     {
-        await _context.Users.AddAsync(user);
+        var userEntity = new User(){
+            Name = user.Name,
+            Mail = user.Mail,
+            CityState = user.CityState,
+            Points = 0
+        };
+
+        await _context.Users.AddAsync(userEntity);
         await _context.SaveChangesAsync();
-        return user;
+        return userEntity;
     }
 
     public async Task<bool> DeleteUser(int id)
@@ -51,6 +58,22 @@ public class UserRepository : IUserRepository {
         }
 
         return user;
+    }
+
+    public async Task<bool> UpdateUserPoints(int userid, int points)
+    {
+        var user = await _context.Users.FindAsync(userid);
+
+        if (user is null)
+            return false;
+
+        var userPoints = user.Points += points;
+
+        user.Points = userPoints;
+
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<bool> UpdateUsersPoints(List<int> userids, int points)

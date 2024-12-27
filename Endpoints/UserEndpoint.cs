@@ -9,7 +9,7 @@ public static class UserEndpoint
         users.MapGet("/", async (IUserRepository repository) => 
             await repository.GetAllUsers());
 
-        users.MapPost("/", async (IUserRepository repository, User user) => 
+        users.MapPost("/", async (IUserRepository repository, CreateUserDTO user) => 
             await repository.CreateUser(user));
 
         users.MapGet("/{id}", async (IUserRepository repository, int id) => 
