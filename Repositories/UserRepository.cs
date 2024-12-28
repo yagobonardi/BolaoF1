@@ -8,18 +8,21 @@ public class UserRepository : IUserRepository {
         _context = context;
     }
 
-    public async Task<User> CreateUser(CreateUserDTO user)
+    public async Task<int> CreateUser(CreateUserDTO user)
     {
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
         var userEntity = new User(){
             Name = user.Name,
             Mail = user.Mail,
             CityState = user.CityState,
-            Points = 0
+            Points = 0,
+            Password = passwordHash
         };
 
         await _context.Users.AddAsync(userEntity);
         await _context.SaveChangesAsync();
-        return userEntity;
+        return userEntity.Id;
     }
 
     public async Task<bool> DeleteUser(int id)
@@ -93,5 +96,14 @@ public class UserRepository : IUserRepository {
         }
 
         return true;
+    }
+
+    public bool VerifyLogin(LoginDTO login)
+    {
+        var user = _context.Users.FirstOrDefault(w => w.Mail == login.Mail);
+
+        if (user is null) return false;
+
+        return BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
     }
 }

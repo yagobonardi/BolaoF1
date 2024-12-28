@@ -20,5 +20,9 @@ public static class UserEndpoint
 
         users.MapDelete("/{id}", async (IUserRepository repository, int id) =>
             await repository.DeleteUser(id));
+
+        users.MapPost("/login", (IUserRepository repository, LoginDTO login) => {
+            repository.VerifyLogin(login);
+        });
     }
 }

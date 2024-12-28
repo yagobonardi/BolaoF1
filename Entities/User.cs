@@ -8,4 +8,6 @@ public class User
     public string CityState { get; set; } = string.Empty;
 
     public int Points { get; set; }
+
+    public string Password { get; set; } = string.Empty;
 }

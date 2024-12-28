@@ -5,4 +5,6 @@ public class CreateUserDTO
     public string Mail { get; set; } = string.Empty;
 
     public string CityState { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
 }
