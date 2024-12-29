@@ -7,7 +7,7 @@ public static class ScorerEndpoint
     {
         var results = routes.MapGroup("/api/v1/scorer");
 
-        results.MapPost("/process", async (IScorerProcess scorer, int idgrandprix) => 
-            await scorer.ProcessGrandPrixPoints(idgrandprix));
+        results.MapPost("/process", async (IScorerProcessService service, int idgrandprix) => 
+            await service.ProcessGrandPrixPoints(idgrandprix));
     }
 }

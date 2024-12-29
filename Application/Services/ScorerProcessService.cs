@@ -2,7 +2,7 @@ using System.Data.Common;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 
-public class ScorerProcess : IScorerProcess 
+public class ScorerProcessService : IScorerProcessService
 {
     public const int POLE_POINTS = 4;
     public const int FIRST_POINTS = 5;
@@ -15,7 +15,7 @@ public class ScorerProcess : IScorerProcess
 
     private readonly IUserRepository _userRepository;
 
-    public ScorerProcess(IResultRepository resultRepository, 
+    public ScorerProcessService(IResultRepository resultRepository, 
                    IGuessRepository guessRepository,
                    IUserRepository userRepository) {
         _resultRepository = resultRepository;
