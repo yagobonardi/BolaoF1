@@ -1,4 +1,4 @@
-public class CreateUserDTO
+public record CreateUserDTO
 {
     public string Name { get; set; } = string.Empty;
 
