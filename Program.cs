@@ -12,7 +12,8 @@ builder.Services.AddScoped<IResultRepository, ResultRepository>();
 builder.Services.AddScoped<IGrandPrixRepository, GrandPrixRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGuessRepository, GuessRepository>();
-builder.Services.AddScoped<IScorerProcess, ScorerProcess>();
+builder.Services.AddScoped<IScorerProcessService, ScorerProcessService>();
+builder.Services.AddScoped<IDriverService, DriverService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
