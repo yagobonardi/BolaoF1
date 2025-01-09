@@ -6,8 +6,5 @@ public static class DriversEndpoint
 
         drivers.MapGet("/", async (IDriverService service) => 
             await service.GetDrivers());
-
-        drivers.MapPost("/", async (IDriverService service, CreateDriverDTO driver) => 
-            await service.CreateDriver(driver));
     }
 }

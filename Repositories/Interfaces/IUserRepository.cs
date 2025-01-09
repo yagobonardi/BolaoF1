@@ -1,5 +1,6 @@
 public interface IUserRepository {
     Task<List<User>> GetAllUsers();
+    Task<List<User>> GetUsersOrderByPoints();
     Task<int> CreateUser(CreateUserDTO user);
     Task<User?> GetUserById(int id);
 

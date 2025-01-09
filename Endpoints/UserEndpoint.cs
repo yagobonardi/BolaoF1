@@ -6,8 +6,11 @@ public static class UserEndpoint
     {
         var users = routes.MapGroup("/api/v1/users");
 
-        users.MapGet("/", async (IUserRepository repository) => 
-            await repository.GetAllUsers());
+         users.MapGet("/", async (IUserRepository repository) => 
+            await repository.GetAllUsers());       
+            
+        users.MapGet("/byPoints", async (IUserRepository repository) => 
+            await repository.GetUsersOrderByPoints());
 
         users.MapPost("/", async (IUserRepository repository, CreateUserDTO user) => 
             await repository.CreateUser(user));

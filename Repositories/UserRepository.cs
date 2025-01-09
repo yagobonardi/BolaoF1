@@ -42,6 +42,11 @@ public class UserRepository : IUserRepository {
         return await _context.Users.ToListAsync();
     }
 
+        public async Task<List<User>> GetUsersOrderByPoints()
+    {
+        return await _context.Users.OrderBy(o => o.Points).ToListAsync();
+    }
+
     public async Task<User?> GetUserById(int id)
     {
         return await _context.Users.FindAsync(id);
