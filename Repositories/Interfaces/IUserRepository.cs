@@ -10,6 +10,4 @@ public interface IUserRepository {
     Task<bool> UpdateUsersPoints(List<int> userids, int points);
 
     Task<bool> UpdateUserPoints(int userid, int points);
-
-    bool VerifyLogin(LoginDTO login);
 }

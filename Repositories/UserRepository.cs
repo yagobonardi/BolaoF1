@@ -102,13 +102,4 @@ public class UserRepository : IUserRepository {
 
         return true;
     }
-
-    public bool VerifyLogin(LoginDTO login)
-    {
-        var user = _context.Users.FirstOrDefault(w => w.Mail == login.Mail);
-
-        if (user is null) return false;
-
-        return BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
-    }
 }

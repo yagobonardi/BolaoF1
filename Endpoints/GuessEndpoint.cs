@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 public static class GuessEndpoint
 {
     public static void RegisterGuessEndpoints(this IEndpointRouteBuilder routes)
