@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BolaoDb>(options =>  options.UseNpgsql("Host=localhost:5432;Database=bolao;Username=admin;Password=admin"));
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<IResultRepository, ResultRepository>();
 builder.Services.AddScoped<IGrandPrixRepository, GrandPrixRepository>();

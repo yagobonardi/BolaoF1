@@ -1,27 +1,24 @@
 
 
+using AutoMapper;
+
 public class DriverService : IDriverService
 {
     private readonly IDriverRepository _driverRepository;
 
-    public DriverService(IDriverRepository driverRepository) {
+    private readonly IMapper _mapper;
+
+    public DriverService(IDriverRepository driverRepository, IMapper mapper) {
         _driverRepository = driverRepository;
+        _mapper = mapper;
     }
 
     public async Task<List<GetDriversDTO>> GetDrivers()
     {
         var drivers = await _driverRepository.GetAllDrivers();
         
-        var response = new List<GetDriversDTO>();
+        var resp = _mapper.Map<List<GetDriversDTO>>(drivers);
 
-        foreach(var driver in drivers) {
-            response.Add(new GetDriversDTO {
-                Id = driver.Id,
-                Name = driver.Name,
-                Team = driver.Team
-            });
-        }
-
-        return response;
+        return resp;
     }
 }
