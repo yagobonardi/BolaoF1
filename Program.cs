@@ -22,6 +22,14 @@ builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bolao F1 API", Version = "v1"});
 });
 
+builder.Services.AddCors(options => {
+   options.AddPolicy("AllowSpecificOrigin", policy => {
+    policy.WithOrigins("http://127.0.0.1:5500")
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+   });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
